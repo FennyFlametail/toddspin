@@ -59,11 +59,13 @@
 	}
 
 	function resetClicks() {
+		if (!confirm('Reset speed?')) return
 		clickCount = 0
 		localStorage.removeItem('clickCount')
 	}
 
 	function resetAll() {
+		if (!confirm('Reset everything?')) return
 		spinCount = 0
 		clickCount = 0
 		totalClickCount = 0
