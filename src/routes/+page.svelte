@@ -6,6 +6,7 @@
 	let image: HTMLImageElement
 	let dialog: HTMLDialogElement
 	let spin = false
+	let spinCount = 0
 	let audio: Howl
 
 	$: if (spin) {
@@ -20,14 +21,29 @@
 <main class:spin>
 	<div class="background" />
 
-	<img bind:this={image} class="todd" src={todd} alt="todd" draggable="false" />
+	<div class="image-container">
+		<img
+			bind:this={image}
+			class="todd"
+			src={todd}
+			alt="todd"
+			draggable="false"
+			on:animationiteration={() => spinCount++}
+		/>
+	</div>
 
-	<div class="controls">
-		<button class="pauseButton" on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
-		<div class="credits">
-			<div>Character © <a href="https://linktr.ee/toddrick">Toddrick</a></div>
-			<div>Art © <a href="https://www.pulexart.com/">Pulex</a></div>
-		</div>
+	<div class="container">
+		<header>
+			<h1>The Todd has spun {spinCount} times</h1>
+		</header>
+
+		<footer>
+			<button class="pauseButton" on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
+			<div class="credits">
+				<div>Character © <a href="https://linktr.ee/toddrick">Toddrick</a></div>
+				<div>Art © <a href="https://www.pulexart.com/">Pulex</a></div>
+			</div>
+		</footer>
 	</div>
 
 	<dialog
@@ -47,14 +63,13 @@
 
 	main {
 		height: 100vh;
-		position: relative;
 		overflow: hidden;
-		display: grid;
-		place-content: center;
 	}
 
 	.background {
-		position: absolute;
+		position: fixed;
+		top: 0;
+		left: 0;
 		height: 100%;
 		width: 100%;
 		background-image: url($lib/assets/background.jpg);
@@ -73,6 +88,16 @@
 		}
 	}
 
+	.image-container {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		display: grid;
+		place-content: center;
+	}
+
 	.todd {
 		width: 80vw;
 		max-width: 512px;
@@ -89,20 +114,17 @@
 		}
 	}
 
-	.controls {
-		position: fixed;
-		bottom: 0;
-		left: 50%;
-		transform: translateX(-50%);
-		width: 100%;
-		max-width: 512px;
-		padding: 0 20px;
+	.container {
+		position: relative;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		text-align: center;
 	}
 
 	.credits {
 		display: flex;
 		justify-content: space-evenly;
-		text-align: center;
-		margin-bottom: var(--spacing);
 	}
 </style>
