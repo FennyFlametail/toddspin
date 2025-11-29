@@ -46,6 +46,9 @@
 <style>
 	:root {
 		--modal-overlay-backdrop-filter: blur(1rem);
+		background-image: url($lib/assets/background.jpg);
+		background-size: auto 100%;
+		background-position: center;
 	}
 
 	main {
