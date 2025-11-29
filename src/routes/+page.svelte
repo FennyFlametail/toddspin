@@ -8,16 +8,12 @@
 	let spin = false
 	let audio: Howl
 
-	function play() {
+	$: if (spin) {
 		dialog.close()
 		if (!audio) audio = new Howl({ src: maxwell, loop: true })
 		audio.play()
-		spin = true
-	}
-
-	function pause() {
-		audio.pause()
-		spin = false
+	} else {
+		if (audio) audio.pause()
 	}
 </script>
 
@@ -25,14 +21,19 @@
 	<img bind:this={image} class="todd" src={todd} alt="todd" draggable="false" class:spin />
 
 	<div class="controls">
-		<button class="pauseButton" on:click={spin ? pause : play}>{spin ? 'Pause' : 'Play'}</button>
+		<button class="pauseButton" on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
 		<div class="credits">
-			<div>Character © <a href="https://linktr.ee/toddrick">Todd</a></div>
+			<div>Character © <a href="https://linktr.ee/toddrick">Toddrick</a></div>
 			<div>Art © <a href="https://www.pulexart.com/">Pulex</a></div>
 		</div>
 	</div>
 
-	<dialog bind:this={dialog} on:click={play} on:keydown={(e) => e.key === 'Enter' && play()} open>
+	<dialog
+		bind:this={dialog}
+		on:click={() => (spin = true)}
+		on:keydown={(e) => e.key === 'Enter' && (spin = true)}
+		open
+	>
 		Click to Start
 	</dialog>
 </main>
