@@ -14,18 +14,18 @@
 
 	onMount(() => {
 		dialog.showModal()
-		spinCount = parseInt(localStorage.getItem('spinCount') ?? '-1')
-		clickCount = parseInt(localStorage.getItem('clickCount') ?? '-1')
-		totalClickCount = parseInt(localStorage.getItem('totalClickCount') ?? '-1')
+		spinCount = parseInt(localStorage.getItem('spinCount') ?? '0')
+		clickCount = parseInt(localStorage.getItem('clickCount') ?? '0')
+		totalClickCount = parseInt(localStorage.getItem('totalClickCount') ?? '0')
 	})
 
-	$: if (browser && spinCount > -1) {
+	$: if (browser && spinCount > 0) {
 		localStorage.setItem('spinCount', String(spinCount))
 	}
-	$: if (browser && clickCount > -1) {
+	$: if (browser && clickCount > 0) {
 		localStorage.setItem('clickCount', String(clickCount))
 	}
-	$: if (browser && totalClickCount > -1) {
+	$: if (browser && totalClickCount > 0) {
 		localStorage.setItem('totalClickCount', String(totalClickCount))
 	}
 
@@ -49,7 +49,12 @@
 		totalClickCount++
 	}
 
-	function resetStats() {
+	function resetClicks() {
+		clickCount = 0
+		localStorage.removeItem('clickCount')
+	}
+
+	function resetAll() {
 		spinCount = 0
 		clickCount = 0
 		totalClickCount = 0
@@ -78,7 +83,7 @@
 		<button
 			class="todd seamless"
 			style:--duration={spinDuration + 's'}
-			on:click={() => clickCount++}
+			on:click={click}
 			on:animationiteration={() => spinCount++}
 		>
 			<img src={todd} alt="todd" draggable="false" />
@@ -87,8 +92,8 @@
 		<footer>
 			<div class="grid">
 				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
-				<button on:click={() => (clickCount = 0)}>Reset Speed ({playbackRate.toFixed(2)}x)</button>
-				<button on:click={resetStats}>Reset Stats</button>
+				<button on:click={resetClicks}>Reset Speed ({playbackRate.toFixed(2)}x)</button>
+				<button on:click={resetAll}>Reset Stats</button>
 			</div>
 			<div class="credits">
 				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
