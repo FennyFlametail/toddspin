@@ -119,7 +119,7 @@
 					<span>Maru Mode</span>
 					<input type="checkbox" role="switch" bind:checked={maruMode} />
 				</label>
-				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
+				<div>Character © <a href="https://toddrick.gay" target="_blank">Toddrick</a></div>
 				<div>Art © <a href="https://www.pulexart.com/" target="_blank">Pulex</a></div>
 			</div>
 		</footer>
