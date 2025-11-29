@@ -17,8 +17,10 @@
 	}
 </script>
 
-<main>
-	<img bind:this={image} class="todd" src={todd} alt="todd" draggable="false" class:spin />
+<main class:spin>
+	<div class="background" />
+
+	<img bind:this={image} class="todd" src={todd} alt="todd" draggable="false" />
 
 	<div class="controls">
 		<button class="pauseButton" on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
@@ -41,15 +43,34 @@
 <style>
 	:root {
 		--modal-overlay-backdrop-filter: blur(1rem);
-		background-image: url($lib/assets/background.jpg);
-		background-size: auto 100%;
-		background-position: center;
 	}
 
 	main {
 		height: 100vh;
+		position: relative;
+		overflow: hidden;
 		display: grid;
 		place-content: center;
+	}
+
+	.background {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		background-image: url($lib/assets/background.jpg);
+		background-size: auto 100%;
+		background-position: center;
+		animation: 10s linear infinite alternate paused backgroundZoom;
+	}
+
+	.spin .background {
+		animation-play-state: running;
+	}
+
+	@keyframes backgroundZoom {
+		to {
+			transform: scale(1.1);
+		}
 	}
 
 	.todd {
@@ -58,7 +79,7 @@
 		animation: 3s linear infinite paused spin;
 	}
 
-	.todd.spin {
+	.spin .todd {
 		animation-play-state: running;
 	}
 
