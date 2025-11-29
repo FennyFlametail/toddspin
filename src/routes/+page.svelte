@@ -93,6 +93,11 @@
 	dialog button {
 		width: 100%;
 		height: 100%;
+
+		&:focus-visible {
+			/* this is the only focusable element in the dialog so it doesn't need a focus ring */
+			box-shadow: none;
+		}
 	}
 
 	.background {
