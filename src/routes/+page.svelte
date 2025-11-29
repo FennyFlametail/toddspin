@@ -36,6 +36,10 @@
 
 	<div class="controls">
 		<button class="pauseButton" on:click={spin ? pause : play}>{spin ? 'Pause' : 'Play'}</button>
+		<div class="credits">
+			<div>Character © <a href="https://linktr.ee/toddrick">Todd</a></div>
+			<div>Art © <a href="https://www.pulexart.com/">Pulex</a></div>
+		</div>
 	</div>
 
 	<dialog bind:this={dialog} on:click={play} on:keydown={(e) => e.key === 'Enter' && play()} open>
@@ -84,5 +88,12 @@
 		width: 100%;
 		max-width: 512px;
 		padding: 0 20px;
+	}
+
+	.credits {
+		display: flex;
+		justify-content: space-evenly;
+		text-align: center;
+		margin-bottom: var(--spacing);
 	}
 </style>
