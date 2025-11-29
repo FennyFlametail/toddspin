@@ -22,7 +22,7 @@
 	}
 
 	$: {
-		playbackRate = clickCount * 0.001 + 1
+		playbackRate = clickCount * 0.002 + 1
 		if (audio) audio.rate(playbackRate)
 	}
 </script>
