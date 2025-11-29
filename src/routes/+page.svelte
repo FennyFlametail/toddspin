@@ -64,6 +64,8 @@
 	main {
 		height: 100vh;
 		overflow: hidden;
+		-webkit-user-select: none;
+		user-select: none;
 	}
 
 	.background {
