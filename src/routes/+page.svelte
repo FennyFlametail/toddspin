@@ -54,7 +54,7 @@
 	</dialog>
 </main>
 
-<style>
+<style lang="scss">
 	:root {
 		--modal-overlay-backdrop-filter: blur(1rem);
 	}
@@ -70,19 +70,19 @@
 		left: 0;
 		height: 100%;
 		width: 100%;
-		background-image: url($lib/assets/background.jpg);
+		background-image: url('$lib/assets/background.jpg');
 		background-size: auto 100%;
 		background-position: center;
 		animation: 10s linear infinite alternate paused backgroundZoom;
-	}
 
-	.spin .background {
-		animation-play-state: running;
-	}
+		.spin & {
+			animation-play-state: running;
+		}
 
-	@keyframes backgroundZoom {
-		to {
-			transform: scale(1.1);
+		@keyframes backgroundZoom {
+			to {
+				transform: scale(1.1);
+			}
 		}
 	}
 
@@ -100,15 +100,15 @@
 		width: 80vw;
 		max-width: 512px;
 		animation: 3s linear infinite paused spin;
-	}
 
-	.spin .todd {
-		animation-play-state: running;
-	}
+		.spin & {
+			animation-play-state: running;
+		}
 
-	@keyframes spin {
-		to {
-			transform: rotateZ(360deg);
+		@keyframes spin {
+			to {
+				transform: rotateZ(360deg);
+			}
 		}
 	}
 
