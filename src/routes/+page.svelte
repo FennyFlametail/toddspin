@@ -11,12 +11,14 @@
 	let spinCount: number
 	let clickCount: number
 	let totalClickCount: number
+	let volume: number
 
 	onMount(() => {
 		dialog.showModal()
 		spinCount = parseInt(localStorage.getItem('spinCount') ?? '0')
 		clickCount = parseInt(localStorage.getItem('clickCount') ?? '0')
 		totalClickCount = parseInt(localStorage.getItem('totalClickCount') ?? '0')
+		volume = parseInt(localStorage.getItem('volume') ?? '100')
 	})
 
 	$: if (browser && spinCount > 0) {
@@ -42,6 +44,11 @@
 		playbackRate = clickCount * 0.002 + 1
 		if (audio) audio.rate(playbackRate)
 		spinDuration = 10 - clickCount / 50
+	}
+
+	$: {
+		if (browser && volume) localStorage.setItem('volume', String(volume))
+		if (audio) audio.volume(volume / 100)
 	}
 
 	function click() {
@@ -92,9 +99,15 @@
 		<footer>
 			<div class="grid">
 				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
-				<button on:click={resetClicks}>Reset Speed ({playbackRate.toFixed(2)}x)</button>
+				<button on:click={resetClicks}
+					>Reset Speed ({browser ? playbackRate.toFixed(2) : '1.00'}x)</button
+				>
 				<button on:click={resetAll}>Reset Stats</button>
 			</div>
+			<label
+				>Volume
+				<input type="range" bind:value={volume} min="0" max="100" />
+			</label>
 			<div class="credits">
 				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
 				<div>Art © <a href="https://www.pulexart.com/" target="_blank">Pulex</a></div>
@@ -113,10 +126,12 @@
 		overflow: hidden;
 		-webkit-user-select: none;
 		user-select: none;
+		text-align: center;
 	}
 
 	dialog {
 		-webkit-backdrop-filter: var(--modal-overlay-backdrop-filter);
+		backdrop-filter: var(--modal-overlay-backdrop-filter);
 	}
 
 	button {
@@ -201,7 +216,6 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		text-align: center;
 	}
 
 	.grid {
