@@ -6,7 +6,6 @@
 	let image: HTMLImageElement
 	let dialog: HTMLDialogElement
 	let spin = false
-	let pausedDegrees = 0
 	let audio: Howl
 
 	function play() {
@@ -18,21 +17,12 @@
 
 	function pause() {
 		audio.pause()
-		pausedDegrees = parseFloat(getComputedStyle(image).rotate) % 360
 		spin = false
 	}
 </script>
 
 <main>
-	<img
-		bind:this={image}
-		class="todd"
-		src={todd}
-		alt="todd"
-		draggable="false"
-		class:spin
-		style:--degrees={`${pausedDegrees}deg`}
-	/>
+	<img bind:this={image} class="todd" src={todd} alt="todd" draggable="false" class:spin />
 
 	<div class="controls">
 		<button class="pauseButton" on:click={spin ? pause : play}>{spin ? 'Pause' : 'Play'}</button>
@@ -64,19 +54,16 @@
 	.todd {
 		width: 80vw;
 		max-width: 512px;
-		rotate: var(--degrees);
+		animation: 3s linear infinite paused spin;
 	}
 
 	.todd.spin {
-		animation: 3s linear infinite spin;
+		animation-play-state: running;
 	}
 
 	@keyframes spin {
-		from {
-			rotate: var(--degrees);
-		}
 		to {
-			rotate: calc(var(--degrees) + 360deg);
+			transform: rotateZ(360deg);
 		}
 	}
 
