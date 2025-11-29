@@ -2,6 +2,7 @@
 	import maxwell from '$lib/assets/maxwell.mp3'
 	import todd from '$lib/assets/todd.webp'
 	import { Howl } from 'howler'
+	import { onMount } from 'svelte'
 
 	let dialog: HTMLDialogElement
 	let audio: Howl
@@ -9,6 +10,8 @@
 	let spinCount = 0
 	let clickCount = 0
 	let playbackRate = 0
+
+	onMount(() => dialog.showModal())
 
 	$: if (spin) {
 		dialog.close()
@@ -25,7 +28,7 @@
 </script>
 
 <main class:spin>
-	<dialog bind:this={dialog} open>
+	<dialog bind:this={dialog}>
 		<button class="seamless" on:click={() => (spin = true)}>Click to Start</button>
 	</dialog>
 
@@ -67,6 +70,10 @@
 		overflow: hidden;
 		-webkit-user-select: none;
 		user-select: none;
+	}
+
+	dialog {
+		-webkit-backdrop-filter: var(--modal-overlay-backdrop-filter);
 	}
 
 	button {
