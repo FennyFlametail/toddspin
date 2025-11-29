@@ -20,7 +20,11 @@
 <main class:spin>
 	<div class="background" />
 
-	<div class="image-container">
+	<div class="container">
+		<header>
+			<h1>The Todd has spun {spinCount} times</h1>
+		</header>
+
 		<img
 			class="todd"
 			src={todd}
@@ -28,12 +32,6 @@
 			draggable="false"
 			on:animationiteration={() => spinCount++}
 		/>
-	</div>
-
-	<div class="container">
-		<header>
-			<h1>The Todd has spun {spinCount} times</h1>
-		</header>
 
 		<footer>
 			<button class="pauseButton" on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
@@ -97,6 +95,7 @@
 	}
 
 	.todd {
+		align-self: center;
 		width: 80vw;
 		max-width: 512px;
 		animation: 3s linear infinite paused spin;
