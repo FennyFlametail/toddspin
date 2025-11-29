@@ -4,9 +4,11 @@
 	import { Howl } from 'howler'
 
 	let dialog: HTMLDialogElement
+	let audio: Howl
 	let spin = false
 	let spinCount = 0
-	let audio: Howl
+	let clickCount = 0
+	let playbackRate = 0
 
 	$: if (spin) {
 		dialog.close()
@@ -15,9 +17,16 @@
 	} else {
 		if (audio) audio.pause()
 	}
+
+	$: {
+		playbackRate = clickCount * 0.001 + 1
+		if (audio) audio.rate(playbackRate)
+	}
 </script>
 
 <main class:spin>
+	<dialog bind:this={dialog} on:click={() => (spin = true)} open>Click to Start</dialog>
+
 	<div class="background" />
 
 	<div class="container">
@@ -30,26 +39,21 @@
 			src={todd}
 			alt="todd"
 			draggable="false"
+			on:click={() => clickCount++}
 			on:animationiteration={() => spinCount++}
 		/>
 
 		<footer>
-			<button class="pauseButton" on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
+			<div class="grid">
+				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
+				<button on:click={() => (clickCount = 0)}>Reset Speed ({playbackRate.toFixed(2)}x)</button>
+			</div>
 			<div class="credits">
 				<div>Character © <a href="https://linktr.ee/toddrick">Toddrick</a></div>
 				<div>Art © <a href="https://www.pulexart.com/">Pulex</a></div>
 			</div>
 		</footer>
 	</div>
-
-	<dialog
-		bind:this={dialog}
-		on:click={() => (spin = true)}
-		on:keydown={(e) => e.key === 'Enter' && (spin = true)}
-		open
-	>
-		Click to Start
-	</dialog>
 </main>
 
 <style lang="scss">
@@ -84,21 +88,20 @@
 		}
 	}
 
-	.image-container {
-		position: fixed;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		display: grid;
-		place-content: center;
-	}
-
 	.todd {
 		align-self: center;
 		width: 80vw;
 		max-width: 512px;
 		animation: 3s linear infinite paused spin;
+		transition: scale 0.1s;
+
+		&:hover {
+			scale: 1.05;
+		}
+
+		&:active {
+			scale: 1;
+		}
 
 		.spin & {
 			animation-play-state: running;
@@ -118,6 +121,14 @@
 		flex-direction: column;
 		justify-content: space-between;
 		text-align: center;
+	}
+
+	button {
+		width: auto;
+	}
+
+	.grid {
+		grid-template-columns: repeat(auto-fit, minmax(0%, 1fr));
 	}
 
 	.credits {
