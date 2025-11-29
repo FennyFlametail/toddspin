@@ -53,8 +53,8 @@
 				<button on:click={() => (clickCount = 0)}>Reset Speed ({playbackRate.toFixed(2)}x)</button>
 			</div>
 			<div class="credits">
-				<div>Character © <a href="https://linktr.ee/toddrick">Toddrick</a></div>
-				<div>Art © <a href="https://www.pulexart.com/">Pulex</a></div>
+				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
+				<div>Art © <a href="https://www.pulexart.com/" target="_blank">Pulex</a></div>
 			</div>
 		</footer>
 	</div>
