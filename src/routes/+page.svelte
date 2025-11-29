@@ -205,6 +205,7 @@
 		min-height: 128px;
 		animation: max(var(--duration), 0.00001s) linear infinite paused spin;
 		transition: scale 0.1s;
+		touch-action: none;
 
 		&:hover {
 			scale: 1.05;
