@@ -3,7 +3,6 @@
 	import todd from '$lib/assets/todd.webp'
 	import { Howl } from 'howler'
 
-	let image: HTMLImageElement
 	let dialog: HTMLDialogElement
 	let spin = false
 	let spinCount = 0
@@ -23,7 +22,6 @@
 
 	<div class="image-container">
 		<img
-			bind:this={image}
 			class="todd"
 			src={todd}
 			alt="todd"
