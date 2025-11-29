@@ -133,6 +133,7 @@
 		-webkit-user-select: none;
 		user-select: none;
 		text-align: center;
+		touch-action: manipulation;
 	}
 
 	dialog {
