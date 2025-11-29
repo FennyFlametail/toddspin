@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from '$app/environment'
 	import maxwell from '$lib/assets/maxwell.mp3'
 	import todd from '$lib/assets/todd.webp'
 	import { Howl } from 'howler'
@@ -9,9 +10,12 @@
 	let spin = false
 	let spinCount = 0
 	let clickCount = 0
-	let playbackRate = 0
 
-	onMount(() => dialog.showModal())
+	onMount(() => {
+		spinCount = parseInt(localStorage.getItem('spinCount') ?? '0')
+		clickCount = parseInt(localStorage.getItem('clickCount') ?? '0')
+		dialog.showModal()
+	})
 
 	$: if (spin) {
 		dialog.close()
@@ -21,9 +25,18 @@
 		if (audio) audio.pause()
 	}
 
+	let playbackRate: number, spinDuration: number
 	$: {
 		playbackRate = clickCount * 0.002 + 1
 		if (audio) audio.rate(playbackRate)
+		spinDuration = 10 - clickCount / 50
+	}
+
+	$: {
+		if (browser) {
+			if (spinCount) localStorage.setItem('spinCount', String(spinCount))
+			if (clickCount) localStorage.setItem('clickCount', String(clickCount))
+		}
 	}
 </script>
 
@@ -36,11 +49,15 @@
 
 	<div class="container">
 		<header>
-			<h1>The Todd has spun {spinCount} times</h1>
+			<hgroup>
+				<h1>{browser ? `The Todd has spun ${spinCount} times` : '\xa0'}</h1>
+				<p>{browser ? `You've clicked ${clickCount} times` : '\xa0'}</p>
+			</hgroup>
 		</header>
 
 		<button
 			class="todd seamless"
+			style:--duration={spinDuration + 's'}
 			on:click={() => clickCount++}
 			on:animationiteration={() => spinCount++}
 		>
@@ -126,7 +143,7 @@
 		align-self: center;
 		width: 80vw;
 		max-width: 512px;
-		animation: 3s linear infinite paused spin;
+		animation: max(var(--duration), 0.00001s) linear infinite paused spin;
 		transition: scale 0.1s;
 
 		&:hover {
