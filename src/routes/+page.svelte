@@ -119,10 +119,6 @@
 </main>
 
 <style lang="scss">
-	:root {
-		--modal-overlay-backdrop-filter: blur(1rem);
-	}
-
 	main {
 		height: 100vh;
 		overflow: hidden;

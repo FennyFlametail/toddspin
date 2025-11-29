@@ -1,2 +1,11 @@
 /* Write your global styles here, in SCSS syntax. Variables and mixins from the src/variables.scss file are available here without importing */
-@import "@picocss/pico/scss/pico";
+$semantic-root-element: '#root';
+@import '@picocss/pico/scss/pico';
+
+:root {
+	--modal-overlay-backdrop-filter: blur(1rem);
+}
+
+body {
+	margin: 0;
+}
