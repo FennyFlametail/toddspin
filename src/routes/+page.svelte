@@ -81,8 +81,12 @@
 	<div class="container">
 		<header>
 			<hgroup>
-				<h1>{browser ? `The Todd has spun ${spinCount} times` : '\xa0'}</h1>
-				<p>{browser ? `You've clicked ${totalClickCount} times` : '\xa0'}</p>
+				<h1>{browser ? `The Todd has spun ${spinCount} times!` : '\xa0'}</h1>
+				<p>
+					{browser
+						? `You've clicked ${totalClickCount} times (speed: ${playbackRate.toFixed(2)}x)`
+						: '\xa0'}
+				</p>
 				<p>{browser && dev ? `(temp click count: ${clickCount})` : '\xa0'}</p>
 			</hgroup>
 		</header>
@@ -97,17 +101,15 @@
 		</button>
 
 		<footer>
-			<div class="grid">
-				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
-				<button on:click={resetClicks}
-					>Reset Speed ({browser ? playbackRate.toFixed(2) : '1.00'}x)</button
-				>
-				<button on:click={resetAll}>Reset Stats</button>
-			</div>
 			<label
 				>Volume
 				<input type="range" bind:value={volume} min="0" max="100" />
 			</label>
+			<div class="grid">
+				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
+				<button on:click={resetClicks}>Reset Speed</button>
+				<button on:click={resetAll}>Reset Stats</button>
+			</div>
 			<div class="credits">
 				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
 				<div>Art © <a href="https://www.pulexart.com/" target="_blank">Pulex</a></div>
@@ -180,6 +182,18 @@
 		}
 	}
 
+	.container {
+		position: relative;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	header h1 {
+		font-size: 1.5rem;
+	}
+
 	.todd {
 		align-self: center;
 		width: 80vw;
@@ -208,14 +222,6 @@
 		img {
 			pointer-events: none;
 		}
-	}
-
-	.container {
-		position: relative;
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
 	}
 
 	.grid {
