@@ -163,7 +163,7 @@
 		height: 100%;
 		width: 100%;
 		background-image: url('$lib/assets/background.jpg');
-		background-size: auto 100%;
+		background-size: cover;
 		background-position: center;
 		animation: 10s linear infinite alternate paused backgroundZoom;
 
