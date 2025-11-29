@@ -1,9 +1,9 @@
 <script lang="ts">
-	import music from '$lib/assets/maxwell.mp3'
-	import image from '$lib/assets/todd.webp'
+	import maxwell from '$lib/assets/maxwell.mp3'
+	import todd from '$lib/assets/todd.webp'
 	import { Howl } from 'howler'
 
-	let todd: HTMLImageElement
+	let image: HTMLImageElement
 	let dialog: HTMLDialogElement
 	let spin = false
 	let pausedDegrees = 0
@@ -11,23 +11,23 @@
 
 	function play() {
 		dialog.close()
-		if (!audio) audio = new Howl({ src: music, loop: true })
+		if (!audio) audio = new Howl({ src: maxwell, loop: true })
 		audio.play()
 		spin = true
 	}
 
 	function pause() {
 		audio.pause()
-		pausedDegrees = parseFloat(getComputedStyle(todd).rotate) % 360
+		pausedDegrees = parseFloat(getComputedStyle(image).rotate) % 360
 		spin = false
 	}
 </script>
 
 <main>
 	<img
-		bind:this={todd}
+		bind:this={image}
 		class="todd"
-		src={image}
+		src={todd}
 		alt="todd"
 		draggable="false"
 		class:spin
