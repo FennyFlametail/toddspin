@@ -129,7 +129,7 @@
 <style lang="scss">
 	main {
 		height: 100vh;
-		overflow: hidden;
+		overflow: auto;
 		-webkit-user-select: none;
 		user-select: none;
 		text-align: center;
@@ -190,9 +190,8 @@
 	.container {
 		position: relative;
 		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+		display: grid;
+		grid-template-rows: auto 1fr auto;
 	}
 
 	header h1 {
@@ -200,9 +199,10 @@
 	}
 
 	.todd {
-		align-self: center;
+		justify-self: center;
 		width: 80vw;
 		max-width: 512px;
+		min-height: 128px;
 		animation: max(var(--duration), 0.00001s) linear infinite paused spin;
 		transition: scale 0.1s;
 
@@ -225,6 +225,9 @@
 		}
 
 		img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
 			pointer-events: none;
 		}
 	}
