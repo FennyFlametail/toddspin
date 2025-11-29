@@ -1,22 +1,42 @@
 <script lang="ts">
-	import maxwell from '$lib/assets/maxwell.mp3'
-	import todd from '$lib/assets/todd.webp'
+	import music from '$lib/assets/maxwell.mp3'
+	import image from '$lib/assets/todd.webp'
 	import { Howl } from 'howler'
 
+	let todd: HTMLImageElement
 	let dialog: HTMLDialogElement
 	let spin = false
+	let pausedDegrees = 0
 	let audio: Howl
 
 	function play() {
 		dialog.close()
-		audio = new Howl({ src: maxwell, loop: true })
+		if (!audio) audio = new Howl({ src: music, loop: true })
 		audio.play()
 		spin = true
+	}
+
+	function pause() {
+		audio.pause()
+		pausedDegrees = parseFloat(getComputedStyle(todd).rotate) % 360
+		spin = false
 	}
 </script>
 
 <main>
-	<img class="todd" src={todd} alt="todd" draggable="false" class:spin />
+	<img
+		bind:this={todd}
+		class="todd"
+		src={image}
+		alt="todd"
+		draggable="false"
+		class:spin
+		style:--degrees={`${pausedDegrees}deg`}
+	/>
+
+	<div class="controls">
+		<button class="pauseButton" on:click={spin ? pause : play}>{spin ? 'Pause' : 'Play'}</button>
+	</div>
 
 	<dialog bind:this={dialog} on:click={play} on:keydown={(e) => e.key === 'Enter' && play()} open>
 		Click to Start
@@ -37,6 +57,7 @@
 	.todd {
 		width: 80vw;
 		max-width: 512px;
+		rotate: var(--degrees);
 	}
 
 	.todd.spin {
@@ -44,8 +65,21 @@
 	}
 
 	@keyframes spin {
-		to {
-			transform: rotateZ(360deg);
+		from {
+			rotate: var(--degrees);
 		}
+		to {
+			rotate: calc(var(--degrees) + 360deg);
+		}
+	}
+
+	.controls {
+		position: fixed;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 100%;
+		max-width: 512px;
+		padding: 0 20px;
 	}
 </style>
