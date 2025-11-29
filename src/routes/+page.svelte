@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser, dev } from '$app/environment'
+	import maru from '$lib/assets/maru.webp'
 	import maxwell from '$lib/assets/maxwell.mp3'
 	import todd from '$lib/assets/todd.webp'
 	import { Howl } from 'howler'
@@ -7,6 +8,7 @@
 
 	let dialog: HTMLDialogElement
 	let audio: Howl
+	let maruMode = false
 	let spin = false
 	let spinCount: number
 	let clickCount: number
@@ -81,13 +83,15 @@
 	<div class="container">
 		<header>
 			<hgroup>
-				<h1>{browser ? `The Todd has spun ${spinCount} times!` : '\xa0'}</h1>
+				<h1>
+					{browser ? `The ${maruMode ? 'Maru' : 'Todd'} has spun ${spinCount} times!` : '\xa0'}
+				</h1>
 				<p>
 					{browser
 						? `You've clicked ${totalClickCount} times (speed: ${playbackRate.toFixed(2)}x)`
 						: '\xa0'}
 				</p>
-				<p>{browser && dev ? `(temp click count: ${clickCount})` : '\xa0'}</p>
+				<p>{browser && dev ? `(speed click count: ${clickCount})` : '\xa0'}</p>
 			</hgroup>
 		</header>
 
@@ -97,7 +101,7 @@
 			on:click={click}
 			on:animationiteration={() => spinCount++}
 		>
-			<img src={todd} alt="todd" draggable="false" />
+			<img src={maruMode ? maru : todd} alt="todd" draggable="false" />
 		</button>
 
 		<footer>
@@ -111,6 +115,10 @@
 				<button on:click={resetAll}>Reset All</button>
 			</div>
 			<div class="credits">
+				<label>
+					<span>Maru Mode</span>
+					<input type="checkbox" role="switch" bind:checked={maruMode} />
+				</label>
 				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
 				<div>Art © <a href="https://www.pulexart.com/" target="_blank">Pulex</a></div>
 			</div>
