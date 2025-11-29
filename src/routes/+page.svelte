@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy'
+
 	import { browser, dev } from '$app/environment'
 	import maru from '$lib/assets/maru.webp'
 	import maxwell from '$lib/assets/maxwell.mp3'
@@ -6,52 +8,54 @@
 	import { Howl } from 'howler'
 	import { onMount } from 'svelte'
 
-	let dialog: HTMLDialogElement
-	let audio: Howl
-	let maruMode = false
-	let spin = false
-	let spinCount: number
-	let clickCount: number
-	let totalClickCount: number
-	let volume: number
+	let dialog = $state<HTMLDialogElement>()
+	let audio = $state(new Howl({ src: maxwell, loop: true }))
+	let maruMode = $state(false)
+	let spin = $state(false)
+	let spinCount = $state(0)
+	let clickCount = $state(0)
+	let totalClickCount = $state(0)
+	let volume = $state(100)
 
 	onMount(() => {
-		dialog.showModal()
+		dialog?.showModal()
 		spinCount = parseInt(localStorage.getItem('spinCount') ?? '0')
 		clickCount = parseInt(localStorage.getItem('clickCount') ?? '0')
 		totalClickCount = parseInt(localStorage.getItem('totalClickCount') ?? '0')
 		volume = parseInt(localStorage.getItem('volume') ?? '100')
 	})
 
-	$: if (browser && spinCount > 0) {
-		localStorage.setItem('spinCount', String(spinCount))
-	}
-	$: if (browser && clickCount > 0) {
-		localStorage.setItem('clickCount', String(clickCount))
-	}
-	$: if (browser && totalClickCount > 0) {
-		localStorage.setItem('totalClickCount', String(totalClickCount))
-	}
+	$effect(() => {
+		if (spinCount > 0) localStorage.setItem('spinCount', String(spinCount))
+	})
 
-	$: if (spin) {
-		dialog.close()
-		if (!audio) audio = new Howl({ src: maxwell, loop: true })
-		audio.play()
-	} else {
-		if (audio) audio.pause()
-	}
+	$effect(() => {
+		if (clickCount > 0) localStorage.setItem('clickCount', String(clickCount))
+	})
 
-	let playbackRate: number, spinDuration: number
-	$: {
-		playbackRate = clickCount * 0.002 + 1
-		if (audio) audio.rate(playbackRate)
-		spinDuration = 10 - clickCount / 50
-	}
+	$effect(() => {
+		if (totalClickCount > 0) localStorage.setItem('totalClickCount', String(totalClickCount))
+	})
 
-	$: {
-		if (browser && volume) localStorage.setItem('volume', String(volume))
-		if (audio) audio.volume(volume / 100)
-	}
+	$effect(() => {
+		if (spin) {
+			dialog?.close()
+			audio.play()
+		} else {
+			audio.pause()
+		}
+	})
+
+	let playbackRate = $derived(clickCount * 0.002 + 1)
+	let spinDuration = $derived(10 - clickCount / 50)
+	$effect(() => {
+		audio.rate(playbackRate)
+	})
+
+	$effect(() => {
+		if (volume) localStorage.setItem('volume', String(volume))
+		audio.volume(volume / 100)
+	})
 
 	function click() {
 		clickCount++
@@ -77,10 +81,10 @@
 
 <main class:spin>
 	<dialog bind:this={dialog}>
-		<button class="seamless" on:click={() => (spin = true)}>Click to Start</button>
+		<button class="seamless" onclick={() => (spin = true)}>Click to Start</button>
 	</dialog>
 
-	<div class="background" />
+	<div class="background"></div>
 
 	<div class="container">
 		<header>
@@ -100,8 +104,8 @@
 		<button
 			class="todd seamless"
 			style:--duration={spinDuration + 's'}
-			on:click={click}
-			on:animationiteration={() => spinCount++}
+			onclick={click}
+			onanimationiteration={() => spinCount++}
 		>
 			<img src={maruMode ? maru : todd} alt="todd" draggable="false" />
 		</button>
@@ -112,9 +116,9 @@
 				<input type="range" bind:value={volume} min="0" max="100" />
 			</label>
 			<div class="grid">
-				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
-				<button on:click={resetClicks}>Reset Speed</button>
-				<button on:click={resetAll}>Reset All</button>
+				<button onclick={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
+				<button onclick={resetClicks}>Reset Speed</button>
+				<button onclick={resetAll}>Reset All</button>
 			</div>
 			<div class="credits">
 				<label>
