@@ -25,7 +25,9 @@
 </script>
 
 <main class:spin>
-	<dialog bind:this={dialog} on:click={() => (spin = true)} open>Click to Start</dialog>
+	<dialog bind:this={dialog} open>
+		<button class="seamless" on:click={() => (spin = true)}>Click to Start</button>
+	</dialog>
 
 	<div class="background" />
 
@@ -34,14 +36,13 @@
 			<h1>The Todd has spun {spinCount} times</h1>
 		</header>
 
-		<img
-			class="todd"
-			src={todd}
-			alt="todd"
-			draggable="false"
+		<button
+			class="todd seamless"
 			on:click={() => clickCount++}
 			on:animationiteration={() => spinCount++}
-		/>
+		>
+			<img src={todd} alt="todd" draggable="false" />
+		</button>
 
 		<footer>
 			<div class="grid">
@@ -66,6 +67,25 @@
 		overflow: hidden;
 		-webkit-user-select: none;
 		user-select: none;
+	}
+
+	button {
+		width: auto;
+
+		:is(&.seamless) {
+			padding: 0;
+			border: none;
+			background: none;
+
+			&:focus:not(:focus-visible) {
+				box-shadow: none;
+			}
+		}
+	}
+
+	dialog button {
+		width: 100%;
+		height: 100%;
 	}
 
 	.background {
@@ -114,6 +134,10 @@
 				transform: rotateZ(360deg);
 			}
 		}
+
+		img {
+			pointer-events: none;
+		}
 	}
 
 	.container {
@@ -123,10 +147,6 @@
 		flex-direction: column;
 		justify-content: space-between;
 		text-align: center;
-	}
-
-	button {
-		width: auto;
 	}
 
 	.grid {
