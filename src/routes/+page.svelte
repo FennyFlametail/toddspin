@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/environment'
+	import { browser, dev } from '$app/environment'
 	import maxwell from '$lib/assets/maxwell.mp3'
 	import todd from '$lib/assets/todd.webp'
 	import { Howl } from 'howler'
@@ -8,14 +8,26 @@
 	let dialog: HTMLDialogElement
 	let audio: Howl
 	let spin = false
-	let spinCount = 0
-	let clickCount = 0
+	let spinCount: number
+	let clickCount: number
+	let totalClickCount: number
 
 	onMount(() => {
-		spinCount = parseInt(localStorage.getItem('spinCount') ?? '0')
-		clickCount = parseInt(localStorage.getItem('clickCount') ?? '0')
 		dialog.showModal()
+		spinCount = parseInt(localStorage.getItem('spinCount') ?? '-1')
+		clickCount = parseInt(localStorage.getItem('clickCount') ?? '-1')
+		totalClickCount = parseInt(localStorage.getItem('totalClickCount') ?? '-1')
 	})
+
+	$: if (browser && spinCount > -1) {
+		localStorage.setItem('spinCount', String(spinCount))
+	}
+	$: if (browser && clickCount > -1) {
+		localStorage.setItem('clickCount', String(clickCount))
+	}
+	$: if (browser && totalClickCount > -1) {
+		localStorage.setItem('totalClickCount', String(totalClickCount))
+	}
 
 	$: if (spin) {
 		dialog.close()
@@ -32,11 +44,18 @@
 		spinDuration = 10 - clickCount / 50
 	}
 
-	$: {
-		if (browser) {
-			if (spinCount) localStorage.setItem('spinCount', String(spinCount))
-			if (clickCount) localStorage.setItem('clickCount', String(clickCount))
-		}
+	function click() {
+		clickCount++
+		totalClickCount++
+	}
+
+	function resetStats() {
+		spinCount = 0
+		clickCount = 0
+		totalClickCount = 0
+		localStorage.removeItem('spinCount')
+		localStorage.removeItem('clickCount')
+		localStorage.removeItem('totalClickCount')
 	}
 </script>
 
@@ -51,7 +70,8 @@
 		<header>
 			<hgroup>
 				<h1>{browser ? `The Todd has spun ${spinCount} times` : '\xa0'}</h1>
-				<p>{browser ? `You've clicked ${clickCount} times` : '\xa0'}</p>
+				<p>{browser ? `You've clicked ${totalClickCount} times` : '\xa0'}</p>
+				<p>{browser && dev ? `(temp click count: ${clickCount})` : '\xa0'}</p>
 			</hgroup>
 		</header>
 
@@ -68,6 +88,7 @@
 			<div class="grid">
 				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
 				<button on:click={() => (clickCount = 0)}>Reset Speed ({playbackRate.toFixed(2)}x)</button>
+				<button on:click={resetStats}>Reset Stats</button>
 			</div>
 			<div class="credits">
 				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
