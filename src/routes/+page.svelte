@@ -108,7 +108,7 @@
 			<div class="grid">
 				<button on:click={() => (spin = !spin)}>{spin ? 'Pause' : 'Play'}</button>
 				<button on:click={resetClicks}>Reset Speed</button>
-				<button on:click={resetAll}>Reset Stats</button>
+				<button on:click={resetAll}>Reset All</button>
 			</div>
 			<div class="credits">
 				<div>Character © <a href="https://linktr.ee/toddrick" target="_blank">Toddrick</a></div>
